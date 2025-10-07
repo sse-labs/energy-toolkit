@@ -1,9 +1,9 @@
 
 
-"""_summary_
-Main class of the energy-toolkit package. Provides multiple methods for measuring the energy of any given program
-"""
 class Energy_Toolkit():
+  """
+  Main class of the energy-toolkit package. Provides multiple methods for measuring the energy of any given program
+  """
   _datapoints = 0
   _repetitions = 0
   _core = 0
@@ -16,21 +16,21 @@ class Energy_Toolkit():
     self._core = core
     self._programs = programs
 
-  """_summary_
-  Add a new program to the list of programs to be executed
-  """
   def add_program(self, program):
+    """
+    Add a new program to the list of programs to be executed
+    """
     self._programs.append(program)
 
-  """_summary_
-  Remove all programs from the list of programs to be executed
-  """
   def clear_programs(self):
+    """
+    Remove all programs from the list of programs to be executed
+    """
     self._programs.clear()
 
-  """_summary_
-  Executes the programs added to the toolkit after another and measures the energy for each of the programs
-  """
   def measure(self):
+    """
+    Executes the programs added to the toolkit after another and measures the energy for each of the programs
+    """
     pass
 
