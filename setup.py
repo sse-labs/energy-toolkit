@@ -1,0 +1,18 @@
+from setuptools import setup, find_packages
+
+setup(
+    name='energy-toolkit',
+    version='0.1',
+    packages=find_packages(),
+    description='Provides functionality to benchmark a program and measure time and energy during execution.',
+    long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
+    author='Maximilian Krebs, Ben Hermann',
+    author_email='maximilian.krebs@cs.tu-dortmund.de',
+    url='https://github.com/printerboi/energy-toolkit',
+    classifiers=[
+        'Programming Language :: Python :: 3',
+        'Operating System :: OS Independent',
+    ],
+    python_requires='>=3.6',
+)
