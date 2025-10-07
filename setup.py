@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='energy-toolkit',
+    name='energy_toolkit',
     version='0.1',
     packages=find_packages(),
     description='Provides functionality to benchmark a program and measure time and energy during execution.',
@@ -15,4 +15,7 @@ setup(
         'Operating System :: OS Independent',
     ],
     python_requires='>=3.6',
+    install_requires=[
+        'numpy>=1.18.0',
+    ],
 )
