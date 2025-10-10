@@ -1,5 +1,6 @@
 
 from enum import Enum
+import cpuinfo
 import platform
 
 class Datapoint():
@@ -21,7 +22,8 @@ class CPU_TYPE(Enum):
     """CPU enum to distinguish different types of CPUs"""
     INTEL = 1
     AMD = 2
-    UNSUPPORTED = 3
+    APPLESILICON = 3
+    UNSUPPORTED = 4
 
 class Toolkit_Util:
   """Util class that provides several helper functions"""
@@ -40,17 +42,17 @@ class Toolkit_Util:
   @staticmethod
   def get_cpu_vendor() -> CPU_TYPE:
     """Returns the CPU vendor of the executing device"""
-    vendor = None
-    with open('/proc/cpuinfo', 'r') as f:
-      for line in f:
-          if line.startswith('vendor_id'):
-              vendor = line.split(':')[1].strip()
+    info = cpuinfo.get_cpu_info()
 
-    if vendor:
-      if 'GenuineIntel' in vendor:
+    brand = info['brand_raw'].lower()
+
+    if brand:
+      if 'intel' in brand:
           return CPU_TYPE.INTEL
-      elif 'AuthenticAMD' in vendor:
+      elif 'amd' in brand:
           return CPU_TYPE.AMD
+      elif 'apple' in brand or 'm1' in brand or 'm2' in brand or 'm4' in brand:
+          return CPU_TYPE.APPLESILICON
       else:
           return CPU_TYPE.UNSUPPORTED
     else:

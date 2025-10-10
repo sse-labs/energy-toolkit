@@ -17,5 +17,6 @@ setup(
     python_requires='>=3.6',
     install_requires=[
         'numpy>=1.18.0',
+        'py-cpuinfo>=9.0.0'
     ],
 )
