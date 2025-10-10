@@ -1,14 +1,26 @@
 import unittest
 from energy_toolkit.energy_toolkit import Energy_Toolkit
 
-class TestEnergyToolkit(unittest.TestCase):
-    def setUp(self):
-        """Setup for the tests to create an instance of the Energy_Toolkit class."""
-        self.toolkit = Energy_Toolkit(dps=10, reps=5)
+class TestEnergyToolkitClass(unittest.TestCase):
+    toolkit: Energy_Toolkit = None
 
-    def test_import(self):
-        """Test the import of the Energy_Toolkit class."""
-        self.assertIsInstance(self.toolkit, Energy_Toolkit)
+    def setUp(self):
+        self.toolkit = Energy_Toolkit()
+
+    def test_creation(self):
+        """Test creation of the toolkit"""
+        tkt = Energy_Toolkit()
+        self.assertIsNotNone(tkt)
+
+    def test_parameter(self):
+        """Test measurement parameters"""
+        tkt = Energy_Toolkit()
+        self.assertEqual(tkt._datapoints, 100)
+        self.assertEqual(tkt._repetitions, 100)
+
+        tkt = Energy_Toolkit(datapoints=50,repetitions=42)
+        self.assertEqual(tkt._datapoints, 50)
+        self.assertEqual(tkt._repetitions, 42)
 
     def test_add_program(self):
         """Test adding a program to the toolkit's program list."""

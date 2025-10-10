@@ -7,7 +7,7 @@ class Program:
   arguments = None
   inputfile = None
 
-  def __init__(self, exe, args, inpfile):
+  def __init__(self, exe: str, args: list[str] = [], inpfile: str = ""):
     """
     Create a new Program object
     """

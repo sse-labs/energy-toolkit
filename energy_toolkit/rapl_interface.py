@@ -17,6 +17,8 @@ class RAPL_Interface:
       energy = RAPL_Interface._read_amd(registerpath)
     elif Toolkit_Util.get_cpu_vendor() == CPU_TYPE.INTEL:
       energy = RAPL_Interface._read_intel(registerpath)
+    else:
+      energy = RAPL_Interface._read_armsilicon()
     
     return energy
   
@@ -63,3 +65,6 @@ class RAPL_Interface:
       cleaned_unit = (unit >> 8) & 0x1F
 
     return cleaned_energy * pow(0.5, cleaned_unit)
+
+  def _read_armsilicon():
+    return 0.0

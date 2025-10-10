@@ -16,13 +16,13 @@ class Energy_Toolkit():
 
   _programs: List[Program]  = []
 
-  def __init__(self, dps, reps, core = 0, programs = []):
-    self._datapoints = dps
-    self._repetitions = reps
+  def __init__(self, datapoints=100, repetitions=100, core = 0, programs = []):
+    self._datapoints = datapoints
+    self._repetitions = repetitions
     self._core = core
     self._programs = programs
 
-  def add_program(self, program) -> None:
+  def add_program(self, program: Program) -> None:
     """
     Add a new program to the list of programs to be executed
     """
@@ -34,7 +34,7 @@ class Energy_Toolkit():
     """
     self._programs.clear()
 
-  def measure(self) -> Dict[str, List[Datapoint]]:
+  def measure(self) -> Dict[str, np.ndarray]:
     """
     Executes the programs added to the toolkit after another and measures the energy for each of the programs
     """
@@ -42,7 +42,7 @@ class Energy_Toolkit():
     # Dict to store relation program -> Datapoints
     program_energy_usage: Dict[str, List[Datapoint]] = {}
 
-    for program in self._programs:
+    for id, program in enumerate(self._programs):
       # Store the recorded datapoint objects for each program separately
       prog_values: List[Datapoint] = []
 
@@ -84,13 +84,48 @@ class Energy_Toolkit():
           avg_time = np.mean(np_time)
 
           # Create and append a new datapoint object to our list of datapoints for the current program
-          prog_values.append({avg_eng, avg_time})
+          prog_values.append(Datapoint(avg_eng, avg_time))
     
-      # Store the datapoints recorded for the current program in our dict
-      program_energy_usage[program] = prog_values
+    # Store the datapoints recorded for the current program in our dict
+    program_energy_usage[id] = prog_values
 
-    return program_energy_usage
+    # Convert our dict to dict -> numpy structure
+    dtype = np.dtype([('energy', float), ('time', float)])
 
+    arrays = {
+      key: np.array([(dp.energy, dp.time) for dp in dplist], dtype=dtype)
+      for key, dplist in program_energy_usage.items()
+    }
+
+    return arrays
+
+  def print_statistics(self, results: Dict[str, np.ndarray]) -> None:
+    """Prints some statistic metrics for the given results returned from a measurement"""
+    # Iterate over program ids in the given results
+    for pid in results:
+      # Retrieve the actual program with the program id
+      program: Program = self._programs[pid]
+
+      time_values = results[pid]['time']
+      energy_values = results[pid]['energy']
+
+      output = f"""
+      ====================================
+      Program {pid}: {program.executeable}
+
+      Time:
+        AVG: {time_values.mean()} s
+        VAR: {time_values.var()} s
+        STD: {time_values.std()} s
+
+      Energy:
+        AVG: {energy_values.mean()} J
+        VAR: {energy_values.var()} J
+        STD: {energy_values.std()} J
+      ====================================
+      """
+
+      print(output)
 
 
     
