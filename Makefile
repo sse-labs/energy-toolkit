@@ -1,6 +1,7 @@
+.PHONY: test
 
 test:
-	python -m unittest discover -s test -p "*.py"
+	sudo .venv/bin/python -m unittest discover -s test -p "*.py"
 
 clean:
 	rm -rf  test/__pycache__

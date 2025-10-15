@@ -107,7 +107,9 @@ class Energy_Toolkit():
       for key, dplist in program_energy_usage.items()
     }
 
+    # Save measured results to the object
     self._results = arrays
+    # Start statistics generation
     self._generate_statistics()
 
 
@@ -125,6 +127,7 @@ class Energy_Toolkit():
       time_values = self._results[pid]['time']
       energy_values = self._results[pid]['energy']
 
+      # Call numpy statistic methods to calculate values
       time_dict["mean"] = time_values.mean()
       time_dict["variance"] = time_values.var()
       time_dict["std_deviation"] = time_values.std()
@@ -137,6 +140,8 @@ class Energy_Toolkit():
       program_stats["energy"] = energy_dict
 
       statistics[pid] = program_stats
+    
+    self._statistics = statistics
 
 
 
@@ -180,11 +185,14 @@ class Energy_Toolkit():
   def _create_location_if_not_exists(self, location) -> bool:
     """Helper method that creates a folder at a location if it does not exists. If an error occurs an error message is printed"""
     try:
+      # Check if the given path exists
       if not os.path.exists(location):
+        # Create the given directory
         os.makedirs(location)
 
       return True
     except:
+      # Catch any error prohibiting the creation of the folder
       self._logger.error("Creation of result location failed!")
       return False
     
@@ -194,15 +202,19 @@ class Energy_Toolkit():
     folder_successfully_created = self._create_location_if_not_exists(self._result_path)
 
     if folder_successfully_created:
+      # iterate over the saved results
       for pid in self._results:
+        # Convert custom dict to a numpy array
         data = np.column_stack((self._results[pid]['time'], self._results[pid]['energy']))
 
+        # Construct the pid folder inside the results dir
         savefolder = os.path.join(self._result_path, str(pid))
         pid_folder_created = self._create_location_if_not_exists(savefolder)
 
         if pid_folder_created:
           savelocation = os.path.join(savefolder, "results.csv")
-          np.savetxt(savelocation, data, header='Time,Energy', delimiter=',', fmt='%.6f')
+          # Save our data as .csv file at the result location
+          np.savetxt(savelocation, data, header='Time,Energy', delimiter=',', fmt='%s')
         else:
           self._logger.error("File could not be saved! Do you habe the correct rights to access the result location?")
 
@@ -212,19 +224,26 @@ class Energy_Toolkit():
 
   def write_statistics(self):
     """Write the last saved statistics to a file. One file for each program under analysis at the specific result location"""
-    folder_successfully_created = self._create_location_if_not_exists(self._result_path)
+    folder_successfully_created = self._create_location_if_not_exists(self._result_path) # create the result location if it does not exist
 
     if folder_successfully_created:
+      # iterate over the saved results
       for pid in self._results:
-        print(self._statistics)
-        data = np.column_stack((self._statistics[pid]['time'], self._statistics[pid]['energy']))
+        # Convert custom dict to a numpy array
+        data = np.column_stack((
+          ["mean", "variance", "std_deviation"],
+          list(self._statistics[pid]['time'].values()),
+          list( self._statistics[pid]['energy'].values())
+          ))
 
+        # Construct the pid folder inside the results dir
         savefolder = os.path.join(self._result_path, str(pid))
         pid_folder_created = self._create_location_if_not_exists(savefolder)
 
         if pid_folder_created:
           savelocation = os.path.join(savefolder, "statistics.csv")
-          np.savetxt(savelocation, data, header='Time,Energy', delimiter=',', fmt='%.6f')
+          # Save our data as .csv file at the result location
+          np.savetxt(savelocation, data, header='Value,Time,Energy', delimiter=',', fmt='%s')
         else:
           self._logger.error("File could not be saved! Do you habe the correct rights to access the result location?")
 
