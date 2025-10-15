@@ -17,6 +17,13 @@ setup(
     python_requires='>=3.6',
     install_requires=[
         'numpy>=1.18.0',
-        'py-cpuinfo>=9.0.0'
+        'py-cpuinfo>=9.0.0',
+        'click>=8.3.0',
+        'PyYAML>=6.0.3'
     ],
+    entry_points={
+        "console_scripts": [
+            "energy-toolkit = energy_toolkit.cli:cli",
+        ],
+    },
 )
