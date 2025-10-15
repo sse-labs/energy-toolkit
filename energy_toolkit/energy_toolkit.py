@@ -80,23 +80,27 @@ class EnergyToolkit: # pylint: disable=too-many-instance-attributes
 
                 # Record 0 up to self._repetitions many repetitions
                 for _ in range(0, self._repetitions):
-                    # Take the current timer and energy reading
-                    time_before = time.perf_counter()
-                    eng_before = RAPLInterface.read(self._vendor)
+                    while True:
+                        # Take the current timer and energy reading
+                        time_before = time.perf_counter()
+                        eng_before = RAPLInterface.read(self._vendor)
 
-                    # Execute the current program
-                    program.execute(self._core)
+                        # Execute the current program
+                        program.execute(self._core)
 
-                    # Read time and energy counter after measurement
-                    eng_after = RAPLInterface.read(self._vendor)
-                    time_after = time.perf_counter()
+                        # Read time and energy counter after measurement
+                        eng_after = RAPLInterface.read(self._vendor)
+                        time_after = time.perf_counter()
 
-                    # TODO: We should add a way to repeat the last measurement, if the energy delta
-                    # becomes negative. This would mitigate overflows in the datapoints.
+                        # Check for negative energy (possible overflow)
+                        if eng_after - eng_before < 0:
+                            # Repeat measurement
+                            continue
 
-                    # Add the measured energy and time readings to our repetition collection
-                    energy_per_rep.append(eng_after - eng_before)
-                    time_per_rep.append(time_after - time_before)
+                        # Store valid measurements
+                        energy_per_rep.append(eng_after - eng_before)
+                        time_per_rep.append(time_after - time_before)
+                        break  # Exit while loop, go to next repetition
 
                 # Convert readings to numpy arrays
                 np_energ = np.array(energy_per_rep)
