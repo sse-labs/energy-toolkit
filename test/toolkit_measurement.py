@@ -4,6 +4,7 @@ import unittest
 import numpy as np
 from energy_toolkit.energy_toolkit import Energy_Toolkit, Program
 
+
 class TestEnergyToolkitMeasurement(unittest.TestCase):
     toolkit: Energy_Toolkit = None
     result: Dict[str, np.ndarray] = None
@@ -12,7 +13,7 @@ class TestEnergyToolkitMeasurement(unittest.TestCase):
     def setUpClass(cls):
         """Initialize a toolkit with a measurement"""
         cls.toolkit = Energy_Toolkit(3, 2)
-        p = Program('./dummyprog', [], "")
+        p = Program("./dummyprog", [], "")
         cls.toolkit.add_program(p)
         cls.toolkit.measure()
         cls.result = cls.toolkit.get_results()
@@ -33,7 +34,7 @@ class TestEnergyToolkitMeasurement(unittest.TestCase):
     def test_write_statistics(self):
         """Write statistics"""
         self.toolkit.write_statistics()
-        
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

@@ -1,70 +1,81 @@
+"""
+RAPL register reader abstraction module.
+Offers a singel method to read the energy values of the current system.
+Selects different method depending on the present CPU vendor.
+"""
 
 import struct
 
-from energy_toolkit.util import Toolkit_Util
 from energy_toolkit.util import CPU_TYPE
 
 
-class RAPL_Interface:
-  
-  @staticmethod
-  def read(vendor, core=0):
-    """Reads the given core energy counter and returns it"""
-    energy = None
-    registerpath = f"/dev/cpu/{core}/msr"
+class RAPLInterface: # pylint: disable=too-few-public-methods
+    """RAPL register reader abstraction class"""
 
-    if vendor == CPU_TYPE.AMD:
-      energy = RAPL_Interface._read_amd(registerpath)
-    elif vendor == CPU_TYPE.INTEL:
-      energy = RAPL_Interface._read_intel(registerpath)
-    else:
-      energy = RAPL_Interface._read_armsilicon()
-    
-    return energy
-  
-  def _read_intel(registerpath):
-    """Reads the current energy register on an INTEL CPU and returns the current energy register value in Joule"""
-    energyreg = 0x639
-    unitreg = 0x606
+    @staticmethod
+    def read(vendor, core=0):
+        """Reads the given core energy counter and returns it"""
+        energy = None
+        registerpath = f"/dev/cpu/{core}/msr"
 
-    energy = 0
-    unit = 0
+        if vendor == CPU_TYPE.AMD:
+            energy = RAPLInterface._read_amd(registerpath)
+        elif vendor == CPU_TYPE.INTEL:
+            energy = RAPLInterface._read_intel(registerpath)
+        else:
+            energy = RAPLInterface._read_armsilicon()
 
-    with open(registerpath, 'rb') as rf:
-      rf.seek(energyreg)
-      rawenergy = rf.read(8)
-      energy = struct.unpack('Q', rawenergy)
-      cleaned_energy = energy[0]
+        return energy
 
-      rf.seek(0)
-      rf.seek(unitreg)
-      rawunit = rf.read(8)
-      unit = struct.unpack('Q', rawunit)[0]
-      cleaned_unit = (unit >> 8) & 0x1F
+    @staticmethod
+    def _read_intel(registerpath):
+        """Reads the current energy register on an INTEL CPU and returns the current energy 
+        register value in Joule"""
+        energyreg = 0x639
+        unitreg = 0x606
 
-    return cleaned_energy * pow(0.5, cleaned_unit)
+        energy = 0
+        unit = 0
 
-  def _read_amd(registerpath):
-    """Reads the current energy register on an AMD CPU and returns the current energy register value in Joule"""
-    energyreg = 0xC001029A
-    unitreg = 0xC0010299
+        with open(registerpath, "rb") as rf:
+            rf.seek(energyreg)
+            rawenergy = rf.read(8)
+            energy = struct.unpack("Q", rawenergy)
+            cleaned_energy = energy[0]
 
-    energy = 0
-    unit = 0
+            rf.seek(0)
+            rf.seek(unitreg)
+            rawunit = rf.read(8)
+            unit = struct.unpack("Q", rawunit)[0]
+            cleaned_unit = (unit >> 8) & 0x1F
 
-    with open(registerpath, 'rb') as rf:
-      rf.seek(energyreg)
-      rawenergy = rf.read(8)
-      energy = struct.unpack('Q', rawenergy)
-      cleaned_energy = energy[0]
+        return cleaned_energy * pow(0.5, cleaned_unit)
 
-      rf.seek(0)
-      rf.seek(unitreg)
-      rawunit = rf.read(8)
-      unit = struct.unpack('Q', rawunit)[0]
-      cleaned_unit = (unit >> 8) & 0x1F
+    @staticmethod
+    def _read_amd(registerpath):
+        """Reads the current energy register on an AMD CPU and returns the current energy 
+        register value in Joule"""
+        energyreg = 0xC001029A
+        unitreg = 0xC0010299
 
-    return cleaned_energy * pow(0.5, cleaned_unit)
+        energy = 0
+        unit = 0
 
-  def _read_armsilicon():
-    return 0.0
+        with open(registerpath, "rb") as rf:
+            rf.seek(energyreg)
+            rawenergy = rf.read(8)
+            energy = struct.unpack("Q", rawenergy)
+            cleaned_energy = energy[0]
+
+            rf.seek(0)
+            rf.seek(unitreg)
+            rawunit = rf.read(8)
+            unit = struct.unpack("Q", rawunit)[0]
+            cleaned_unit = (unit >> 8) & 0x1F
+
+        return cleaned_energy * pow(0.5, cleaned_unit)
+
+    @staticmethod
+    def _read_armsilicon():
+        """Dummy function to provide values for apple silicon devices"""
+        return 0.0
