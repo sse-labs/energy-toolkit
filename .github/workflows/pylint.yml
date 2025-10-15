@@ -22,6 +22,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install pylint
           pip install -e .
-      - name: Analysing the code with pylint
+      - name: Linting
         run: |
           pylint energy_toolkit
