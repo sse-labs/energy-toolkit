@@ -6,7 +6,7 @@ from energy_toolkit.logger import Logger
 import numpy as np
 import os
 
-from energy_toolkit.util import Datapoint
+from energy_toolkit.util import Datapoint, Toolkit_Util
 
 class Energy_Toolkit():
   """
@@ -31,6 +31,7 @@ class Energy_Toolkit():
     self._programs = programs
     self._result_path = resultpath
     self._logger = Logger().get_logger()
+    self._vendor = Toolkit_Util.get_cpu_vendor()
 
   def add_program(self, program: Program) -> None:
     """
@@ -66,13 +67,13 @@ class Energy_Toolkit():
           for _ in range(0, self._repetitions):
             # Take the current timer and energy reading
             time_before = time.perf_counter()
-            eng_before = RAPL_Interface.read()
+            eng_before = RAPL_Interface.read(self._vendor)
             
             # Execute the current program
             program.execute(self._core)
 
             # Read time and energy counter after measurement
-            eng_after = RAPL_Interface.read()
+            eng_after = RAPL_Interface.read(self._vendor)
             time_after = time.perf_counter()
 
             # TODO: We should add a way to repeat the last measurement, if the energy delta becomes negative. This would mitigate overflows in the datapoints.
@@ -95,9 +96,10 @@ class Energy_Toolkit():
 
           # Create and append a new datapoint object to our list of datapoints for the current program
           prog_values.append(Datapoint(avg_eng, avg_time))
+
+      # Store the datapoints recorded for the current program in our dict
+      program_energy_usage[id] = prog_values
     
-    # Store the datapoints recorded for the current program in our dict
-    program_energy_usage[id] = prog_values
 
     # Convert our dict to dict -> numpy structure
     dtype = np.dtype([('energy', float), ('time', float)])
@@ -156,19 +158,18 @@ class Energy_Toolkit():
       time_values = self._statistics[pid]['time']
       energy_values = self._statistics[pid]['energy']
 
-      output = f"""
-      ====================================
+      output = f"""====================================
       Program {pid}: {program.executeable}
 
       Time:
-        AVG: {time_values["mean"]} s
-        VAR: {time_values["variance"]} s
-        STD: {time_values["std_deviation"]} s
+        AVG: {time_values["mean"]:.5e} s
+        VAR: {time_values["variance"]:.5e} s
+        STD: {time_values["std_deviation"]:.5e} s
 
       Energy:
-        AVG: {energy_values["mean"]} J
-        VAR: {energy_values["variance"]} J
-        STD: {energy_values["std_deviation"]} J
+        AVG: {energy_values["mean"]:.5e} J
+        VAR: {energy_values["variance"]:.5e} J
+        STD: {energy_values["std_deviation"]:.5e} J
       ====================================
       """
 
@@ -249,6 +250,3 @@ class Energy_Toolkit():
 
     else:
       self._logger.error("File could not be saved! Do you habe the correct rights to access the result location?")
-
-    
-

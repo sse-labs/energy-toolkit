@@ -8,14 +8,14 @@ from energy_toolkit.util import CPU_TYPE
 class RAPL_Interface:
   
   @staticmethod
-  def read(core=0):
+  def read(vendor, core=0):
     """Reads the given core energy counter and returns it"""
     energy = None
     registerpath = f"/dev/cpu/{core}/msr"
 
-    if Toolkit_Util.get_cpu_vendor() == CPU_TYPE.AMD:
+    if vendor == CPU_TYPE.AMD:
       energy = RAPL_Interface._read_amd(registerpath)
-    elif Toolkit_Util.get_cpu_vendor() == CPU_TYPE.INTEL:
+    elif vendor == CPU_TYPE.INTEL:
       energy = RAPL_Interface._read_intel(registerpath)
     else:
       energy = RAPL_Interface._read_armsilicon()

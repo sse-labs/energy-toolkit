@@ -1,0 +1,12 @@
+programs:
+  - executeable: ./test/dummyprog
+    args: []
+    input: ""
+  
+  - executeable: ./test/dummyprog
+    args: []
+    input: ""
+
+  - executeable: ./test/dummyprog
+    args: []
+    input: ""
