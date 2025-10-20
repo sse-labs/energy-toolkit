@@ -122,8 +122,7 @@ def measure(
     )
 )
 @click.argument("programs", type=click.Path(exists=True))
-@click.option("--verbose", "-v", is_flag=True, help="Output debug prints")
-def validate(programs, verbose):
+def validate(programs):
     """Verbose command to validate a given program config"""
     debug_log(f"Validating programs file {programs}")
     try:

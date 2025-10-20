@@ -1,7 +1,11 @@
+"""
+Logger class that implements a singleton logger
+"""
+
 import logging
-import click
 import sys
 from datetime import datetime
+import click
 
 
 class ClickFormatter(logging.Formatter):
@@ -53,7 +57,7 @@ class SingleLineStreamHandler(logging.StreamHandler):
                 sys.stdout.write(msg + "\n")
                 sys.stdout.flush()
 
-        except Exception:
+        except Exception: # pylint: disable=broad-exception-caught
             self.handleError(record)
 
 
@@ -62,6 +66,7 @@ class Logger:
     """Singleton Logger class with click-style color and same-line updates."""
 
     _instance = None
+    _logger = None
 
     def __new__(cls):
         if cls._instance is None:
@@ -83,4 +88,5 @@ class Logger:
             self._logger.addHandler(handler)
 
     def get_logger(self):
+        """Return logger instance"""
         return self._logger

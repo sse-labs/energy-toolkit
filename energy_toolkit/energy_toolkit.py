@@ -73,7 +73,9 @@ class EnergyToolkit: # pylint: disable=too-many-instance-attributes
             prog_values: List[Datapoint] = []
 
             Logger().get_logger().debug(
-                f"Evaluating program {idx} [{program.get_executeable()}]..."
+                "Evaluating program %d [%s]...",
+                idx,
+                program.get_executeable()
             )
 
             # Record 0 up to self._datapoints many average measurements
@@ -81,9 +83,11 @@ class EnergyToolkit: # pylint: disable=too-many-instance-attributes
                 # Store the values recorded during each measurement repetition
                 energy_per_rep = []
                 time_per_rep = []
-                
+
                 Logger().get_logger().debug(
-                    f"Evaluating datapoint {_ + 1}/{self._datapoints}",
+                    "Evaluating datapoint %d/%d",
+                    _ + 1,
+                    self._datapoints,
                     extra={"same_line": True}
                 )
 
