@@ -126,17 +126,25 @@ def measure(
 def validate(programs, verbose):
     """Verbose command to validate a given program config"""
     debug_log(f"Validating programs file {programs}")
-    config = ConfigParser.parse(programs)
-    ConfigParser.validate(config)
-
-    if verbose:
+    try:
+        config = ConfigParser.parse(programs)
+        ConfigParser.validate(config)
         debug_log("Configuration valid.")
+    except click.ClickException as e :
+        error_log("Errors during validation found! Programs config invalid!")
+        error_log(f"Reason: {e}")
 
 
 def debug_log(message):
     """Debug helper function to print debug messages with time code and styling"""
     current_time = datetime.now().strftime("%H:%M:%S")
     colored_time = click.style(f"[{current_time}]", fg="green")
+    click.echo(f"{colored_time} {message}")
+
+def error_log(message):
+    """Debug helper function to print error messages with time code and styling"""
+    current_time = datetime.now().strftime("%H:%M:%S")
+    colored_time = click.style(f"[{current_time}]", fg="red")
     click.echo(f"{colored_time} {message}")
 
 
