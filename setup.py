@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="energy_toolkit",
-    version="1.0",
+    version="1.0.1",
     packages=find_packages(),
     description="Provides functionality to benchmark a program and measure time and energy during execution.",
     long_description=open("README.md").read(),
