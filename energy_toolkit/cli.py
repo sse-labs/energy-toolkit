@@ -100,7 +100,7 @@ def measure(
         toolkit.add_program(prog)
 
     if verbose:
-        debug_log("Starting measurements! Grab a coffee...")
+        debug_log("Starting measurements! Grab a coffee... ☕")
 
     # Start the measurements and write the measurement files
     toolkit.measure()
