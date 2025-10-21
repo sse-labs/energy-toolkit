@@ -108,7 +108,7 @@ class EnergyToolkit:
                         time_after = time.perf_counter()
 
                         # Check for negative energy (possible overflow)
-                        if eng_after > 0 and eng_before > 0:
+                        if eng_after - eng_before > 0:
                             measurement_valid = True
 
                             # Store valid measurements
