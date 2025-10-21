@@ -62,7 +62,7 @@ def measure(
     output,
     verbose,
     stats
-    ): # pylint: disable=too-many-positional-arguments, too-many-arguments
+    ):
     """Measure command. Used to measure the files defined in the given program config."""
 
     # Validate that the command was called with elevated rights

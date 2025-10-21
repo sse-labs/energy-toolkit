@@ -1,8 +1,11 @@
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, Extension
+
+# Define our custom msr reader extension
+msr_extension = Extension('energy_toolkit.msr_reader', sources=['energy_toolkit/msr_reader.c'])
 
 setup(
     name="energy_toolkit",
-    version="1.0.1",
+    version="1.0.2",
     packages=find_packages(),
     description="Provides functionality to benchmark a program and measure time and energy during execution.",
     long_description=open("README.md").read(),
@@ -26,4 +29,5 @@ setup(
             "energy-toolkit = energy_toolkit.cli:cli",
         ],
     },
+    ext_modules=[msr_extension]
 )

@@ -7,7 +7,7 @@ import platform
 import cpuinfo
 
 
-class Datapoint: # pylint: disable=too-few-public-methods
+class Datapoint:
     """Data class for managing measurement values inside the toolkit. 
     Each datapoint stores the recorded energy and the duration of the execution"""
 
@@ -19,7 +19,7 @@ class Datapoint: # pylint: disable=too-few-public-methods
         self.time = t
 
 
-class OS_TYPE(Enum): # pylint: disable=invalid-name, too-few-public-methods
+class OS_TYPE(Enum): # pylint: disable=invalid-name
     """OS enum to distinguish different types of OS"""
 
     LINUX = 1
@@ -27,7 +27,7 @@ class OS_TYPE(Enum): # pylint: disable=invalid-name, too-few-public-methods
     UNSUPPORTED = 3
 
 
-class CPU_TYPE(Enum): # pylint: disable=invalid-name, too-few-public-methods
+class CPU_TYPE(Enum): # pylint: disable=invalid-name
     """CPU enum to distinguish different types of CPUs"""
 
     INTEL = 1
