@@ -1,4 +1,7 @@
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, Extension
+
+msr_extension = Extension('energy_toolkit.msr_reader',
+                          sources=['energy_toolkit/msr_reader.c'])
 
 setup(
     name="energy_toolkit",
@@ -26,4 +29,5 @@ setup(
             "energy-toolkit = energy_toolkit.cli:cli",
         ],
     },
+    ext_modules=[msr_extension]
 )
