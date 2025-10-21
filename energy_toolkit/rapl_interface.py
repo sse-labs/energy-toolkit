@@ -4,13 +4,11 @@ Offers a singel method to read the energy values of the current system.
 Selects different method depending on the present CPU vendor.
 """
 
-import struct
-
 from energy_toolkit.util import CPU_TYPE
 from energy_toolkit import msr_reader
 
 
-class RAPLInterface: # pylint: disable=too-few-public-methods
+class RAPLInterface:
     """RAPL register reader abstraction class"""
 
     @staticmethod

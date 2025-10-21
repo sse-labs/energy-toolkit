@@ -13,7 +13,7 @@ from energy_toolkit.logger import Logger
 from energy_toolkit.util import Datapoint, ToolkitUtil
 
 
-class EnergyToolkit: # pylint: disable=too-many-instance-attributes
+class EnergyToolkit:
     """
     Main class of the energy-toolkit package. Provides multiple methods for measuring the energy 
     of any given program
@@ -38,7 +38,7 @@ class EnergyToolkit: # pylint: disable=too-many-instance-attributes
         core=0,
         programs=None,
         resultpath="./results",
-    ): # pylint: disable=too-many-positional-arguments, too-many-arguments
+    ):
         self._datapoints = datapoints
         self._repetitions = repetitions
         self._core = core
@@ -93,9 +93,9 @@ class EnergyToolkit: # pylint: disable=too-many-instance-attributes
 
                 # Record 0 up to self._repetitions many repetitions
                 for _ in range(0, self._repetitions):
-                    measurementValid = False
+                    measurement_valid = False
 
-                    while not measurementValid:
+                    while not measurement_valid:
                         # Take the current timer and energy reading
                         time_before = time.perf_counter()
                         eng_before = RAPLInterface.read(self._vendor)
@@ -109,8 +109,8 @@ class EnergyToolkit: # pylint: disable=too-many-instance-attributes
 
                         # Check for negative energy (possible overflow)
                         if eng_after > 0 and eng_before > 0:
-                            measurementValid = True
-                            
+                            measurement_valid = True
+
                             # Store valid measurements
                             energy_per_rep.append(eng_after - eng_before)
                             time_per_rep.append(time_after - time_before)
