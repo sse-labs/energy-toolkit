@@ -93,7 +93,9 @@ class EnergyToolkit: # pylint: disable=too-many-instance-attributes
 
                 # Record 0 up to self._repetitions many repetitions
                 for _ in range(0, self._repetitions):
-                    while True:
+                    measurementValid = False
+
+                    while not measurementValid:
                         # Take the current timer and energy reading
                         time_before = time.perf_counter()
                         eng_before = RAPLInterface.read(self._vendor)
@@ -106,14 +108,12 @@ class EnergyToolkit: # pylint: disable=too-many-instance-attributes
                         time_after = time.perf_counter()
 
                         # Check for negative energy (possible overflow)
-                        if eng_after - eng_before < 0:
-                            # Repeat measurement
-                            continue
-
-                        # Store valid measurements
-                        energy_per_rep.append(eng_after - eng_before)
-                        time_per_rep.append(time_after - time_before)
-                        break  # Exit while loop, go to next repetition
+                        if eng_after > 0 and eng_before > 0:
+                            measurementValid = True
+                            
+                            # Store valid measurements
+                            energy_per_rep.append(eng_after - eng_before)
+                            time_per_rep.append(time_after - time_before)
 
                 # Convert readings to numpy arrays
                 np_energ = np.array(energy_per_rep)
