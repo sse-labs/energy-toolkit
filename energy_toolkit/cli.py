@@ -8,8 +8,9 @@ from datetime import datetime
 import click
 from energy_toolkit.config_parser import ConfigParser
 from energy_toolkit.energy_toolkit import EnergyToolkit
+from energy_toolkit.plotter import Plotter
 from energy_toolkit.program import Program
-
+from energy_toolkit.util import PlotMode
 
 
 @click.group()
@@ -54,15 +55,7 @@ def cli():
 )
 @click.option("--verbose", "-v", is_flag=True, help="Output debug prints")
 @click.option("--stats", "-s", is_flag=True, help="Print statistics after execution")
-def measure(
-    programs,
-    core,
-    repetitions,
-    datapoints,
-    output,
-    verbose,
-    stats
-    ):
+def measure(programs, core, repetitions, datapoints, output, verbose, stats):
     """Measure command. Used to measure the files defined in the given program config."""
 
     # Validate that the command was called with elevated rights
@@ -129,8 +122,42 @@ def validate(programs):
         config = ConfigParser.parse(programs)
         ConfigParser.validate(config)
         debug_log("Configuration valid.")
-    except click.ClickException as e :
+    except click.ClickException as e:
         error_log("Errors during validation found! Programs config invalid!")
+        error_log(f"Reason: {e}")
+
+
+@cli.command(
+    help=(
+        "Plot generated energy-toolkit results.\n\n"
+        "Parses a given folder and plots the result.csv files"
+    )
+)
+@click.option(
+    "--mode",
+    type=click.Choice(["bar", "line"], case_sensitive=False),
+    default="bar",
+    show_default=True,
+    help="Choose the chart style.",
+)
+@click.option(
+    "--headless",
+    "-h",
+    is_flag=True,
+    help="Show the plot after generation if false. " \
+    "If true saves an pdf of the plot without displaying it.",
+)
+@click.argument("results", type=click.Path(exists=True))
+def plot(results, mode, headless):
+    """Read data under the given path and plots the content"""
+    debug_log(f"Reading files in folder {results}")
+    try:
+        modep = PlotMode.str_to_plotmode(mode)
+        plotter = Plotter(results, modep)
+        print(headless)
+        plotter.plot(headless)
+    except click.ClickException as e:
+        error_log("Errors during plotting found!")
         error_log(f"Reason: {e}")
 
 
@@ -139,6 +166,7 @@ def debug_log(message):
     current_time = datetime.now().strftime("%H:%M:%S")
     colored_time = click.style(f"[{current_time}]", fg="green")
     click.echo(f"{colored_time} {message}")
+
 
 def error_log(message):
     """Debug helper function to print error messages with time code and styling"""

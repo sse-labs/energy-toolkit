@@ -23,6 +23,8 @@ setup(
         "py-cpuinfo>=9.0.0",
         "click>=8.3.0",
         "PyYAML>=6.0.3",
+        "plotly>=6.3.1",
+        "kaleido>=1.1.0"
     ],
     entry_points={
         "console_scripts": [

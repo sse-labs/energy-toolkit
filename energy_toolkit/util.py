@@ -71,3 +71,25 @@ class ToolkitUtil:
             return CPU_TYPE.UNSUPPORTED
 
         return CPU_TYPE.UNSUPPORTED
+
+
+class PlotMode(Enum):
+    """
+    Enum to distinguish the mode selected for plotting
+    """
+    LINECHART = 0
+    BARCHART = 1
+    UNDEFINED = 2
+
+    @classmethod
+    def str_to_plotmode(cls, modestr: str):
+        """
+        Converts a given string to a PlotMode entry
+        """
+        if modestr == "bar":
+            return PlotMode.BARCHART
+
+        if modestr == "line":
+            return PlotMode.LINECHART
+
+        return PlotMode.UNDEFINED
