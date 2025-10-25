@@ -152,9 +152,10 @@ def plot(results, mode, headless):
     """Read data under the given path and plots the content"""
     debug_log(f"Reading files in folder {results}")
     try:
+        debug_log(f"Creating a {mode} chart")
         modep = PlotMode.str_to_plotmode(mode)
         plotter = Plotter(results, modep)
-        print(headless)
+        debug_log("Parsing complete. Generating plot.")
         plotter.plot(headless)
     except click.ClickException as e:
         error_log("Errors during plotting found!")
