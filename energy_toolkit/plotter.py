@@ -197,7 +197,7 @@ class Plotter:
         energy and time as bar charts, with standard deviation error bars.
         """
         labels = [f"Program {i+1}" for i in range(len(data))]
-        
+
         avg_times = [float(np.mean(d["# Time"])) for d in data]
         avg_energy = [float(np.mean(d["Energy"])) for d in data]
 
@@ -216,11 +216,7 @@ class Plotter:
                 x=labels,
                 y=avg_times,
                 name="Time in s",
-                error_y=dict(
-                    type="data",
-                    array=std_times,
-                    visible=True,
-                ),
+                error_y={"type": 'data', "array": std_times, "visible": True},
             ),
             row=1,
             col=1,
@@ -231,11 +227,7 @@ class Plotter:
                 x=labels,
                 y=avg_energy,
                 name="Energy in J",
-                error_y=dict(
-                    type="data",
-                    array=std_energy,
-                    visible=True,
-                ),
+                error_y={"type": 'data', "array": std_energy, "visible": True},
             ),
             row=1,
             col=2,
