@@ -193,25 +193,58 @@ class Plotter:
 
     def _plot_bars(self, data) -> go.Figure:
         """
-        Function to create a figure object that shows the mean of each programs energy and time
-        as bar chart respectively.
+        Function to create a figure object that shows the mean of each program's 
+        energy and time as bar charts, with standard deviation error bars.
         """
         labels = [f"Program {i+1}" for i in range(len(data))]
+        
         avg_times = [float(np.mean(d["# Time"])) for d in data]
         avg_energy = [float(np.mean(d["Energy"])) for d in data]
+
+        std_times = [float(np.std(d["# Time"])) for d in data]
+        std_energy = [float(np.std(d["Energy"])) for d in data]
 
         # One figure, two subplots
         fig = make_subplots(
             rows=1,
             cols=2,
-            subplot_titles=("Average Time per program", "Average Energy per program"),
+            subplot_titles=("Average Time per Program", "Average Energy per Program"),
         )
 
-        fig.add_trace(go.Bar(x=labels, y=avg_times, name="Time in s"), row=1, col=1)
-        fig.add_trace(go.Bar(x=labels, y=avg_energy, name="Energy in J"), row=1, col=2)
+        fig.add_trace(
+            go.Bar(
+                x=labels,
+                y=avg_times,
+                name="Time in s",
+                error_y=dict(
+                    type="data",
+                    array=std_times,
+                    visible=True,
+                ),
+            ),
+            row=1,
+            col=1,
+        )
+
+        fig.add_trace(
+            go.Bar(
+                x=labels,
+                y=avg_energy,
+                name="Energy in J",
+                error_y=dict(
+                    type="data",
+                    array=std_energy,
+                    visible=True,
+                ),
+            ),
+            row=1,
+            col=2,
+        )
 
         fig.update_layout(
-            showlegend=True, autosize=True, margin={"l": 20, "r": 20, "t": 40, "b": 20}
+            showlegend=True,
+            autosize=True,
+            margin={"l": 20, "r": 20, "t": 40, "b": 20},
         )
 
         fig.update_xaxes(title_text="Programs")
