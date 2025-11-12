@@ -178,7 +178,9 @@ class EnergyToolkit:
         """Prints some statistic metrics for the given results returned from a measurement"""
 
         # Iterate over program ids in the given results
-        for pid in self._statistics.items():
+        for stat_item in self._statistics.items():
+            pid = stat_item[0] # Query the pid from the tuple
+
             # Retrieve the actual program with the program id
             program: Program = self._programs[pid]
 
@@ -186,7 +188,7 @@ class EnergyToolkit:
             energy_values = self._statistics[pid]["energy"]
 
             output = f"""====================================
-      Program {pid}: {program.executeable}
+      Program {pid}: {program.get_executeable()}
 
       Time:
         AVG: {time_values["mean"]:.5e} s
