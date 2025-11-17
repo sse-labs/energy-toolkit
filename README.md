@@ -210,10 +210,6 @@ Each entry defines:
 | `validate` | Validates program configuration files before measurement.         |
 
 The CLI provides a flexible and scriptable way to benchmark energy efficiency, making it ideal for automated testing or performance evaluation workflows.
-
-Here’s a polished **“Usage as Library”** section that matches the tone and structure of your existing README, and cleanly demonstrates how to use the `energy-toolkit` programmatically in Python.
-It builds on the example you provided and fits naturally after your CLI documentation.
-
 ---
 
 ## Usage as Library
