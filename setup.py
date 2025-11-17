@@ -5,7 +5,7 @@ msr_extension = Extension('energy_toolkit.msr_reader', sources=['energy_toolkit/
 
 setup(
     name="energy_toolkit",
-    version="1.0.4",
+    version="1.0.5",
     packages=find_packages(),
     description="Provides functionality to benchmark a program and measure time and energy during execution.",
     long_description=open("README.md").read(),
