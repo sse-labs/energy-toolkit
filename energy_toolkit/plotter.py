@@ -2,11 +2,15 @@
 Plotter module to plot data recorded with the energy-toolkit application
 """
 
+import getpass
+import subprocess
+import tempfile
 from typing import Dict, List
 import csv
 import os
 from pathlib import Path
 from datetime import datetime
+import webbrowser
 
 import click
 import numpy as np
@@ -15,8 +19,6 @@ from plotly.subplots import make_subplots
 
 from energy_toolkit.logger import Logger
 from energy_toolkit.util import PlotMode
-
-
 
 
 class Plotter:
@@ -150,7 +152,9 @@ class Plotter:
             current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
             fig.write_image(f"figure_{current_time}.pdf", width=1000, height=520)
         else:
-            fig.show()
+            current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"results/figure_{current_time}.html"
+            fig.write_html(filename)
 
     def _plot_lines(self, data) -> go.Figure:
         """

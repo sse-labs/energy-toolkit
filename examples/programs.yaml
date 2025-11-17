@@ -1,0 +1,16 @@
+programs:
+  - executeable: ./build/insertionsort
+    args: []
+    input: ""
+
+  - executeable: ./build/quicksort
+    args: []
+    input: ""
+
+  - executeable: ./build/bubblesort
+    args: []
+    input: ""
+
+  - executeable: ./build/stdsort
+    args: []
+    input: ""
