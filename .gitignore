@@ -209,3 +209,9 @@ __marimo__/
 *.csv
 .vscode/
 *.pdf
+
+examples/results
+examples/build
+examples/.venv
+
+*.html
