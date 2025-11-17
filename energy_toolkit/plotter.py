@@ -2,15 +2,11 @@
 Plotter module to plot data recorded with the energy-toolkit application
 """
 
-import getpass
-import subprocess
-import tempfile
 from typing import Dict, List
 import csv
 import os
 from pathlib import Path
 from datetime import datetime
-import webbrowser
 
 import click
 import numpy as np
