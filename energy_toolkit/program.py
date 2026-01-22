@@ -1,7 +1,7 @@
 """
 Program abstraction
 """
-
+import os
 import subprocess
 
 from energy_toolkit.logger import Logger
@@ -32,20 +32,18 @@ class Program:
         """
         Execute the program on a specific core
         """
-        arguments = " ".join(self._arguments)
-        ex = self._executeable
-
-        if self._inputfile:
-            command = f"taskset -c {core} {ex} {arguments} < {self._inputfile} > /dev/null"
-        else:
-            command = f"taskset -c {core} {ex} {arguments} > /dev/null"
-
         try:
+            Logger().get_logger().debug(
+                "Different way to call subprocess...",
+            )
+            fin = open(self._inputfile, "r") if self._inputfile else subprocess.DEVNULL
+
             subprocess.run(
-                command,
-                shell=True,           # Needed to use `<`
-                capture_output=True,   # Capture stdout and stderr
-                text=True,              # Get output as string
+                ["taskset", "-c", str(core), self._executeable] + self._arguments,
+                stdin=fin,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                preexec_fn=lambda: os.sched_setaffinity(0, {core}),
                 check=True
             )
 
