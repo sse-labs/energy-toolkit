@@ -33,9 +33,6 @@ class Program:
         Execute the program on a specific core
         """
         try:
-            Logger().get_logger().debug(
-                "Different way to call subprocess...",
-            )
             fin = open(self._inputfile, "r") if self._inputfile else subprocess.DEVNULL
 
             subprocess.run(
