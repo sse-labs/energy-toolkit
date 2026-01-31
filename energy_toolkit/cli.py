@@ -156,7 +156,7 @@ def plot(results, mode, headless):
         modep = PlotMode.str_to_plotmode(mode)
         plotter = Plotter(results, modep)
         debug_log("Parsing complete. Generating plot.")
-        plotter.plot(headless)
+        plotter.plot(results, headless)
     except click.ClickException as e:
         error_log("Errors during plotting found!")
         error_log(f"Reason: {e}")
