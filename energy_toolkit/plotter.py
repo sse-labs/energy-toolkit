@@ -127,7 +127,7 @@ class Plotter:
 
         return True
 
-    def plot(self, headless=False):
+    def plot(self, path="results", headless=False):
         """
         Plot the data stored in the object. If headless is true the plot will be saved as .pdf file,
         otherwise plotlys web rendering is used.
@@ -149,7 +149,7 @@ class Plotter:
             fig.write_image(f"figure_{current_time}.pdf", width=1000, height=520)
         else:
             current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
-            filename = f"results/figure_{current_time}.html"
+            filename = f"{path}/figure_{current_time}.html"
             fig.write_html(filename)
 
     def _plot_lines(self, data) -> go.Figure:

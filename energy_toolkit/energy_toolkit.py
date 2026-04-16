@@ -98,13 +98,13 @@ class EnergyToolkit:
                     while not measurement_valid:
                         # Take the current timer and energy reading
                         time_before = time.perf_counter()
-                        eng_before = RAPLInterface.read(self._vendor)
+                        eng_before = RAPLInterface.read(self._vendor, self._core)
 
                         # Execute the current program
                         program.execute(self._core)
 
                         # Read time and energy counter after measurement
-                        eng_after = RAPLInterface.read(self._vendor)
+                        eng_after = RAPLInterface.read(self._vendor, self._core)
                         time_after = time.perf_counter()
 
                         # Check for negative energy (possible overflow)
