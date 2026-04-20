@@ -36,7 +36,7 @@ class EnergyToolkit:
         datapoints=100,
         repetitions=100,
         core=0,
-        programs=None,
+        programs=[],
         resultpath="./results",
     ):
         self._datapoints = datapoints

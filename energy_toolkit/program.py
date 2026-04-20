@@ -33,15 +33,24 @@ class Program:
         Execute the program on a specific core
         """
         try:
-            with open(self._inputfile, "r", encoding="utf-8") as fin:
+            if self._inputfile != "":
+                with open(self._inputfile, "r", encoding="utf-8") as fin:
+                    subprocess.run(
+                        ["taskset", "-c", str(core), self._executeable] + self._arguments,
+                        stdin=fin,
+                        stdout=subprocess.DEVNULL,
+                        stderr=subprocess.DEVNULL,
+                        preexec_fn=lambda: os.sched_setaffinity(0, {core}),
+                        check=True
+                    )
+            else:
                 subprocess.run(
-                    ["taskset", "-c", str(core), self._executeable] + self._arguments,
-                    stdin=fin,
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL,
-                    preexec_fn=lambda: os.sched_setaffinity(0, {core}),
-                    check=True
-                )
+                        ["taskset", "-c", str(core), self._executeable] + self._arguments,
+                        stdout=subprocess.DEVNULL,
+                        stderr=subprocess.DEVNULL,
+                        preexec_fn=lambda: os.sched_setaffinity(0, {core}),
+                        check=True
+                    )
 
         except Exception as e: # pylint: disable=broad-exception-caught
             Logger().get_logger().error(e)
