@@ -209,7 +209,7 @@ Each entry defines:
 | `measure`  | Runs the configured programs and records energy consumption data. |
 | `validate` | Validates program configuration files before measurement.         |
 
-The CLI provides a flexible and scriptable way to benchmark energy efficiency, making it ideal for automated testing or performance evaluation workflows.
+
 ---
 
 ## Usage as Library
@@ -226,11 +226,11 @@ The following example demonstrates how to use the `Energy_Toolkit` class to:
 4. Write results and statistics to disk.
 
 ```python
-from energy_toolkit.energy_toolkit import Energy_Toolkit, Program
+from energy_toolkit.energy_toolkit import EnergyToolkit, Program
 
 # Create an Energy_Toolkit instance
 # Parameters: datapoints=3, repetitions=2
-toolkit = Energy_Toolkit(datapoints=3, repetitions=2)
+toolkit = EnergyToolkit(datapoints=3, repetitions=2)
 
 # Define the programs to be measured
 program1 = Program("./program_a", ["--mode", "fast"], "")
