@@ -36,13 +36,16 @@ class EnergyToolkit:
         datapoints=100,
         repetitions=100,
         core=0,
-        programs=[],
+        programs=None,
         resultpath="./results",
     ):
         self._datapoints = datapoints
         self._repetitions = repetitions
         self._core = core
-        self._programs = programs
+
+        # Create a new list if no programs are provided
+        self._programs = programs if programs is not None else []
+
         self._result_path = resultpath
         self._logger = Logger().get_logger()
         self._vendor = ToolkitUtil.get_cpu_vendor()
